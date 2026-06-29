@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Local Properties ###
+src/main/resources/application-local.properties
+
 ### Next App (Frontend) ###
 frontend/node_modules/
 frontend/.next/
