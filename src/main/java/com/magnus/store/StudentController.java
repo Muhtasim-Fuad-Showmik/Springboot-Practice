@@ -46,4 +46,9 @@ public class StudentController {
         // When both variables are named the same, the "id" no longer needs to be specified within the parentheses
         return new Student(studentId, "Muhtasim", "Fuad");
     }
+
+    @GetMapping("students/query")
+    public Student studentRequestVariable(@RequestParam int id) {
+        return new Student(id, "Muhtasim", "Fuad");
+    }
 }
