@@ -5,7 +5,10 @@ public class Student {
     private String firstName;
     private String lastName;
 
-    Student(int id, String firstName, String lastName) {
+    public Student() {
+    }
+
+    public Student(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
