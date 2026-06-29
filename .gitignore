@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Next App (Frontend) ###
+frontend/node_modules/
+frontend/.next/
+frontend/out/
