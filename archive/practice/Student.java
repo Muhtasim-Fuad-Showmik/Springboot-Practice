@@ -1,4 +1,4 @@
-package com.magnus.store;
+package com.magnus.employeemanagement;
 
 public class Student {
     private int id;

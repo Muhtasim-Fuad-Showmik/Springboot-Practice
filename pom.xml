@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.magnus</groupId>
-    <artifactId>store</artifactId>
+  <artifactId>employee-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>store</name>
-    <description>store</description>
+  <name>Employee Management</name>
+  <description>Employee Management</description>
     <url/>
     <licenses>
         <license/>

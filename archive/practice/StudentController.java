@@ -1,4 +1,4 @@
-package com.magnus.store;
+package com.magnus.employeemanagement;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

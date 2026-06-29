@@ -1,4 +1,4 @@
-package com.magnus.store;
+package com.magnus.employeemanagement;
 
 import org.springframework.stereotype.Service;
 

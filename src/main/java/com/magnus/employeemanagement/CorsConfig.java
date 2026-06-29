@@ -1,4 +1,4 @@
-package com.magnus.store;
+package com.magnus.employeemanagement;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
