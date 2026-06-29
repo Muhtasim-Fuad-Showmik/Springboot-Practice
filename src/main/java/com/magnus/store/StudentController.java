@@ -1,8 +1,7 @@
 package com.magnus.store;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +49,14 @@ public class StudentController {
     @GetMapping("students/query")
     public Student studentRequestVariable(@RequestParam int id) {
         return new Student(id, "Muhtasim", "Fuad");
+    }
+
+    @PostMapping("students/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Student createStudent(@RequestBody Student student) {
+        System.out.println("ID: " + student.getId());
+        System.out.println("First Name: " + student.getFirstName());
+        System.out.println("Last Name: " + student.getLastName());
+        return student;
     }
 }
