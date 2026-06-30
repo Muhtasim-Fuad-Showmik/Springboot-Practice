@@ -1,3 +1,6 @@
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
 import {
   Table,
   TableBody,
@@ -7,102 +10,64 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { fetchEmployees } from "@/lib/api/employees"
+import { Cardio } from "ldrs/react"
+import "ldrs/react/Cardio.css"
 
 export default function EmployeesPage() {
-  const dummyData = [
-    {
-      id: 1,
-      firstName: "David",
-      lastName: "Martinez",
-      email: "davidmartinez@gmail.com",
-    },
-    {
-      id: 2,
-      firstName: "Lucy",
-      lastName: "Martinez",
-      email: "lucymartinez@gmail.com",
-    },
-    {
-      id: 4,
-      firstName: "Adam",
-      lastName: "Smasher",
-      email: "adamsmasher@gmail.com",
-    },
-    {
-      id: 5,
-      firstName: "Rogue",
-      lastName: "Amendiares",
-      email: "rogueamendiares@gmail.com",
-    },
-    {
-      id: 6,
-      firstName: "Weak",
-      lastName: "Kingsley",
-      email: "weakkingsley@gmail.com",
-    },
-    {
-      id: 7,
-      firstName: "Arthur",
-      lastName: "Cormac",
-      email: "arthurcormac@gmail.com",
-    },
-    {
-      id: 8,
-      firstName: "Gloria",
-      lastName: "Martinez",
-      email: "gloriamartinez@gmail.com",
-    },
-    {
-      id: 9,
-      firstName: "Sasha",
-      lastName: "Yakovleva",
-      email: "sashayakovleva@gmail.com",
-    },
-    {
-      id: 10,
-      firstName: "Rebecca",
-      lastName: "Carmine",
-      email: "rebeccacarmine@gmail.com",
-    },
-    {
-      id: 3,
-      firstName: "Lucyna",
-      lastName: "Martinez",
-      email: "lucynamartinez@edgerunners.cyberpunk",
-    },
-  ]
+  const {
+    data: employees,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["employees"],
+    queryFn: fetchEmployees,
+  })
 
   return (
-    <div className="flex min-h-svh p-6">
+    <div className="flex min-h-svh justify-center p-6">
       <div className="flex min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
+        <div className="text-center">
           <h1>Employees List</h1>
 
-          <Table>
-            <TableCaption>
-              List of all employees registered within the system
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-right">Id</TableHead>
-                <TableHead>First Name</TableHead>
-                <TableHead>Last Name</TableHead>
-                <TableHead>Email</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {dummyData.map((emp) => (
-                <TableRow key={emp.id}>
-                  <TableCell className="text-right font-medium">
-                    {emp.id}
-                  </TableCell>
-                  <TableCell>{emp.firstName}</TableCell>
-                  <TableCell>{emp.lastName}</TableCell>
-                  <TableCell>{emp.email}</TableCell>
+          {isPending && (
+            <Cardio size="50" stroke="4" speed="2" color="var(--primary)" />
+          )}
+
+          {isError && (
+            <p className="text-red-500">
+              Error loading employees: {error?.message}
+            </p>
+          )}
+
+          {!isPending && !isError && (
+            <Table>
+              <TableCaption>
+                List of all employees registered within the system
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-right">Id</TableHead>
+                  <TableHead>First Name</TableHead>
+                  <TableHead>Last Name</TableHead>
+                  <TableHead>Email</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {employees?.map((emp) => (
+                  <TableRow key={emp.id}>
+                    <TableCell className="text-right font-medium">
+                      {emp.id}
+                    </TableCell>
+                    <TableCell>{emp.firstName}</TableCell>
+                    <TableCell>{emp.lastName}</TableCell>
+                    <TableCell>{emp.email}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
     </div>
