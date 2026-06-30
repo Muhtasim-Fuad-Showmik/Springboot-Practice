@@ -9,6 +9,9 @@ import com.magnus.employeemanagement.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
@@ -24,9 +27,40 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(("Employee with given Id does not exist : " + employeeId)));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(("Employee with given ID does not exist : " + employeeId)));
 
         return EmployeeMapper.mapToEmployeeDto(employee);
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream().map(EmployeeMapper::mapToEmployeeDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee) {
+        // Verify employee with provided ID exists
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Employee with given ID does not exist : " + employeeId));
+
+        // Update employee information (everything but ID)
+        if (updatedEmployee.getFirstName() != null) {
+            employee.setFirstName(updatedEmployee.getFirstName());
+        }
+        if (updatedEmployee.getLastName() != null) {
+            employee.setLastName(updatedEmployee.getLastName());
+        }
+        if (updatedEmployee.getEmail() != null) {
+            employee.setEmail(updatedEmployee.getEmail());
+        }
+
+        // Updates employee with provided information based on provided employee ID
+        Employee updatedEntity = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeDto(updatedEntity);
     }
 }
