@@ -11,8 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { fetchEmployees } from "@/lib/api/employees"
-import { Cardio } from "ldrs/react"
-import "ldrs/react/Cardio.css"
+import { LineWobble } from "ldrs/react"
+import "ldrs/react/LineWobble.css"
 
 export default function EmployeesPage() {
   const {
@@ -32,7 +32,13 @@ export default function EmployeesPage() {
           <h1>Employees List</h1>
 
           {isPending && (
-            <Cardio size="50" stroke="4" speed="2" color="var(--primary)" />
+            <LineWobble
+              size="80"
+              stroke="5"
+              bgOpacity="0.1"
+              speed="1.75"
+              color="var(--primary)"
+            />
           )}
 
           {isError && (
