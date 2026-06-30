@@ -38,3 +38,30 @@ export async function createEmployee(
 
   return response.json()
 }
+
+export async function updateEmployee(
+  id: number,
+  data: Partial<CreateEmployeeInput>
+): Promise<Employee> {
+  const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to update employee: ${response.statusText}`)
+  }
+
+  return response.json()
+}
+
+export async function deleteEmployee(id: number): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete employee: ${response.statusText}`)
+  }
+}

@@ -1,6 +1,8 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
+import { useState } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { Pencil, Trash2, Check, X } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -10,12 +12,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { fetchEmployees } from "@/lib/api/employees"
+import EditableCell from "@/components/editable-cell"
+import { Button } from "@/components/ui/button"
+import {
+  fetchEmployees,
+  updateEmployee,
+  type Employee,
+  type CreateEmployeeInput,
+} from "@/lib/api/employees"
 import CreateEmployeeDialog from "@/components/create-employee-dialog"
-import { LineWobble } from "ldrs/react"
+import DeleteEmployeeDialog from "@/components/delete-employee-dialog"
+import { LineWobble, Ping } from "ldrs/react"
 import "ldrs/react/LineWobble.css"
+import "ldrs/react/Ping.css"
 
 export default function EmployeesPage() {
+  const queryClient = useQueryClient()
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editFormData, setEditFormData] = useState<CreateEmployeeInput>({
+    firstName: "",
+    lastName: "",
+    email: "",
+  })
+  const [deleteTarget, setDeleteTarget] = useState<Employee | null>(null)
+
   const {
     data: employees,
     isPending,
@@ -25,6 +45,29 @@ export default function EmployeesPage() {
     queryKey: ["employees"],
     queryFn: fetchEmployees,
   })
+
+  const updateMutation = useMutation({
+    mutationFn: (params: { id: number; data: Partial<CreateEmployeeInput> }) =>
+      updateEmployee(params.id, params.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employees"] })
+      setEditingId(null)
+    },
+  })
+
+  const startEditing = (emp: Employee) => {
+    setEditingId(emp.id)
+    setEditFormData({
+      firstName: emp.firstName,
+      lastName: emp.lastName,
+      email: emp.email,
+    })
+  }
+
+  const handleSave = () => {
+    if (editingId === null) return
+    updateMutation.mutate({ id: editingId, data: editFormData })
+  }
 
   return (
     <div className="flex min-h-svh justify-center p-6">
@@ -50,7 +93,7 @@ export default function EmployeesPage() {
 
           {!isPending && !isError && (
             <div>
-              <Table>
+              <Table className="table-fixed">
                 <TableCaption>
                   List of all employees registered within the system
                 </TableCaption>
@@ -60,27 +103,118 @@ export default function EmployeesPage() {
                     <TableHead>First Name</TableHead>
                     <TableHead>Last Name</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead className="w-20"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {employees?.map((emp) => (
-                    <TableRow key={emp.id}>
-                      <TableCell className="text-right font-medium">
-                        {emp.id}
-                      </TableCell>
-                      <TableCell>{emp.firstName}</TableCell>
-                      <TableCell>{emp.lastName}</TableCell>
-                      <TableCell>{emp.email}</TableCell>
-                    </TableRow>
-                  ))}
+                  {employees?.map((emp) => {
+                    const isEditing = editingId === emp.id
+
+                    return (
+                      <TableRow key={emp.id} className="group">
+                        <TableCell className="text-right font-medium">
+                          {emp.id}
+                        </TableCell>
+                        <EditableCell
+                          isEditing={isEditing}
+                          displayValue={emp.firstName}
+                          value={editFormData.firstName}
+                          onChange={(v) =>
+                            setEditFormData((prev) => ({
+                              ...prev,
+                              firstName: v,
+                            }))
+                          }
+                        />
+                        <EditableCell
+                          isEditing={isEditing}
+                          displayValue={emp.lastName}
+                          value={editFormData.lastName}
+                          onChange={(v) =>
+                            setEditFormData((prev) => ({
+                              ...prev,
+                              lastName: v,
+                            }))
+                          }
+                        />
+                        <EditableCell
+                          isEditing={isEditing}
+                          displayValue={emp.email}
+                          value={editFormData.email}
+                          onChange={(v) =>
+                            setEditFormData((prev) => ({ ...prev, email: v }))
+                          }
+                        />
+                        <TableCell className="p-0">
+                          {isEditing ? (
+                            <div className="flex h-full">
+                              <Button
+                                variant="ghost"
+                                onClick={handleSave}
+                                disabled={updateMutation.isPending}
+                                className="flex flex-1 items-center justify-center rounded-none text-green-600"
+                              >
+                                {updateMutation.isPending ? (
+                                  <Ping size="20" speed="2" color="white" />
+                                ) : (
+                                  <Check className="size-4" />
+                                )}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                onClick={() => setEditingId(null)}
+                                className="flex flex-1 items-center justify-center rounded-none text-destructive hover:bg-destructive/10"
+                              >
+                                <X className="size-4" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="flex h-full opacity-0 transition-opacity group-hover:opacity-100">
+                              <Button
+                                variant="ghost"
+                                onClick={() => startEditing(emp)}
+                                className="flex flex-1 items-center justify-center rounded-none text-primary hover:bg-primary/10"
+                              >
+                                <Pencil className="size-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                onClick={() => setDeleteTarget(emp)}
+                                className="flex flex-1 items-center justify-center rounded-none text-destructive hover:bg-destructive/10"
+                              >
+                                <Trash2 className="size-4" />
+                              </Button>
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
                 </TableBody>
               </Table>
+
+              {updateMutation.isError && (
+                <p className="mt-2 text-xs text-destructive">
+                  {updateMutation.error?.message}
+                </p>
+              )}
+
               <div className="mt-4 flex justify-end">
                 <CreateEmployeeDialog />
               </div>
             </div>
           )}
         </div>
+
+        {deleteTarget && (
+          <DeleteEmployeeDialog
+            employee={deleteTarget}
+            open={!!deleteTarget}
+            onOpenChange={(open) => {
+              if (!open) setDeleteTarget(null)
+            }}
+          />
+        )}
       </div>
     </div>
   )

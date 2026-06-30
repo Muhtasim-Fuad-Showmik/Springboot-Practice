@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { LineWobble } from "ldrs/react"
 
 const createEmployeeSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -86,11 +87,7 @@ export default function CreateEmployeeDialog() {
 
           <div className="grid gap-2">
             <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              id="lastName"
-              placeholder="Doe"
-              {...register("lastName")}
-            />
+            <Input id="lastName" placeholder="Doe" {...register("lastName")} />
             {errors.lastName && (
               <p className="text-xs text-destructive">
                 {errors.lastName.message}
@@ -107,9 +104,7 @@ export default function CreateEmployeeDialog() {
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-destructive">
-                {errors.email.message}
-              </p>
+              <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
 
@@ -121,7 +116,17 @@ export default function CreateEmployeeDialog() {
 
           <DialogFooter>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Creating..." : "Create Employee"}
+              {mutation.isPending ? (
+                <LineWobble
+                  size="80"
+                  stroke="5"
+                  bgOpacity="0.1"
+                  speed="1.75"
+                  color="white"
+                />
+              ) : (
+                "Create Employee"
+              )}
             </Button>
           </DialogFooter>
         </form>
