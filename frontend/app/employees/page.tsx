@@ -99,7 +99,7 @@ export default function EmployeesPage() {
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-right">Id</TableHead>
+                    <TableHead className="w-8 text-right">Id</TableHead>
                     <TableHead>First Name</TableHead>
                     <TableHead>Last Name</TableHead>
                     <TableHead>Email</TableHead>

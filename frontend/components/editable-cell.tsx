@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input"
 import { TableCell } from "@/components/ui/table"
+import { cn } from "@/lib/utils"
 
 interface EditableCellProps {
   readonly isEditing: boolean
@@ -17,7 +18,14 @@ export default function EditableCell({
   onChange,
 }: EditableCellProps) {
   return (
-    <TableCell className={isEditing ? "p-1" : undefined}>
+    <TableCell
+      className={cn(
+        {
+          "p-1": isEditing,
+        },
+        "text-left"
+      )}
+    >
       {isEditing ? (
         <Input
           value={value}
