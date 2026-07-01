@@ -3,6 +3,12 @@
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { Pencil, Trash2, Check, X } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Table,
   TableBody,
@@ -103,6 +109,7 @@ export default function EmployeesPage() {
                     <TableHead>First Name</TableHead>
                     <TableHead>Last Name</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead>Departments</TableHead>
                     <TableHead className="w-20"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -145,6 +152,38 @@ export default function EmployeesPage() {
                             setEditFormData((prev) => ({ ...prev, email: v }))
                           }
                         />
+                        <TableCell className="text-left">
+                          {emp.departments && emp.departments.length > 0 ? (
+                            <div className="flex items-center gap-1">
+                              <Badge variant="green">
+                                {emp.departments[0].name}
+                              </Badge>
+                              {emp.departments.length > 1 && (
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Badge
+                                      variant="outline"
+                                      className="cursor-pointer"
+                                    >
+                                      +{emp.departments.length - 1}
+                                    </Badge>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-2">
+                                    <div className="flex flex-wrap gap-1">
+                                      {emp.departments.map((d) => (
+                                        <Badge key={d.id} variant="green">
+                                          {d.name}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
                         <TableCell className="p-0">
                           {isEditing ? (
                             <div className="flex h-full">
