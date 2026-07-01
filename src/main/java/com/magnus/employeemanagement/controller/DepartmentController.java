@@ -2,18 +2,18 @@ package com.magnus.employeemanagement.controller;
 
 import com.magnus.employeemanagement.dto.DepartmentDto;
 import com.magnus.employeemanagement.service.DepartmentService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
     @PostMapping
     public ResponseEntity<DepartmentDto> createDepartment(@RequestBody DepartmentDto departmentDto) {

@@ -6,16 +6,16 @@ import com.magnus.employeemanagement.exception.ResourceNotFoundException;
 import com.magnus.employeemanagement.mapper.DepartmentMapper;
 import com.magnus.employeemanagement.repository.DepartmentRepository;
 import com.magnus.employeemanagement.service.DepartmentService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
-    private DepartmentRepository departmentRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public DepartmentDto createDepartment(DepartmentDto departmentDto) {
@@ -50,10 +50,10 @@ public class DepartmentServiceImpl implements DepartmentService {
                                 "Department with given ID does not exist : " + departmentId));
 
         // Update department information (everything but ID)
-        if(updatedDepartment.getName() != null) {
+        if (updatedDepartment.getName() != null) {
             department.setName(updatedDepartment.getName());
         }
-        if(updatedDepartment.getDescription() != null) {
+        if (updatedDepartment.getDescription() != null) {
             department.setDescription(updatedDepartment.getDescription());
         }
 
