@@ -9,7 +9,10 @@ import {
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 
-const navItems = [{ href: "/employees", label: "Employees" }]
+const navItems = [
+  { href: "/employees", label: "Employees" },
+  { href: "/departments", label: "Departments" },
+]
 
 export default function Header() {
   const pathname = usePathname()
