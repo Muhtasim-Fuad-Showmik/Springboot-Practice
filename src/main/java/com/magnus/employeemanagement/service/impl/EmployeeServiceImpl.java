@@ -6,16 +6,16 @@ import com.magnus.employeemanagement.exception.ResourceNotFoundException;
 import com.magnus.employeemanagement.mapper.EmployeeMapper;
 import com.magnus.employeemanagement.repository.EmployeeRepository;
 import com.magnus.employeemanagement.service.EmployeeService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
