@@ -2,8 +2,12 @@ package com.magnus.employeemanagement.service;
 
 import com.magnus.employeemanagement.dto.DepartmentDto;
 
+import java.util.List;
+
 public interface DepartmentService {
     DepartmentDto createDepartment(DepartmentDto departmentDto);
 
     DepartmentDto getDepartmentById(Long departmentId);
+
+    List<DepartmentDto> getAllDepartments();
 }

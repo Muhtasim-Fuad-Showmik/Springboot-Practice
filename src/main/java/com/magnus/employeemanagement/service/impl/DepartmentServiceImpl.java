@@ -9,6 +9,9 @@ import com.magnus.employeemanagement.service.DepartmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
@@ -25,8 +28,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDto getDepartmentById(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Department with given ID does not exist : " + departmentId)
-                );
+                        () -> new ResourceNotFoundException(
+                                "Department with given ID does not exist : " + departmentId));
         return DepartmentMapper.mapToDepartmentDto(department);
+    }
+
+    @Override
+    public List<DepartmentDto> getAllDepartments() {
+        List<Department> departments = departmentRepository.findAll();
+        return departments.stream().map(
+                        DepartmentMapper::mapToDepartmentDto)
+                .collect(Collectors.toList());
     }
 }
