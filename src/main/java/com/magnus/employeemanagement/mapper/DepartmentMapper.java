@@ -11,7 +11,8 @@ public class DepartmentMapper {
         return new DepartmentDto(
                 department.getId(),
                 department.getName(),
-                department.getDescription());
+                department.getDescription(),
+                department.getEmployees().size());
     }
 
     public static Department mapToDepartment(DepartmentDto departmentDto) {

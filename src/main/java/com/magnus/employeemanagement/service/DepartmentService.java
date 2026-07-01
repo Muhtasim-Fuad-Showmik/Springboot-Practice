@@ -14,4 +14,6 @@ public interface DepartmentService {
     DepartmentDto updateDepartment(Long departmentId, DepartmentDto updatedDepartment);
 
     String deleteDepartment(Long departmentId);
+
+    DepartmentDto setDepartmentEmployees(Long departmentId, List<Long> employeeIds);
 }

@@ -45,4 +45,12 @@ public class DepartmentController {
         String successMessage = departmentService.deleteDepartment(departmentId);
         return ResponseEntity.ok(successMessage);
     }
+
+    @PutMapping("{id}/employees")
+    public ResponseEntity<DepartmentDto> setDepartmentEmployees(
+            @PathVariable("id") Long departmentId,
+            @RequestBody List<Long> employeeIds) {
+        DepartmentDto departmentDto = departmentService.setDepartmentEmployees(departmentId, employeeIds);
+        return ResponseEntity.ok(departmentDto);
+    }
 }
