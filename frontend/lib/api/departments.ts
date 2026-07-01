@@ -4,6 +4,7 @@ export interface Department {
   id: number
   name: string
   description: string
+  employeeCount: number
 }
 
 export interface CreateDepartmentInput {
@@ -62,4 +63,26 @@ export async function deleteDepartment(id: number): Promise<void> {
   if (!response.ok) {
     throw new Error(`Failed to delete department: ${response.statusText}`)
   }
+}
+
+export async function setDepartmentEmployees(
+  departmentId: number,
+  employeeIds: number[]
+): Promise<Department> {
+  const response = await fetch(
+    `${API_BASE_URL}/departments/${departmentId}/employees`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(employeeIds),
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to set department employees: ${response.statusText}`
+    )
+  }
+
+  return response.json()
 }

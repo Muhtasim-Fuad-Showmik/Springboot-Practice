@@ -5,6 +5,7 @@ export interface Employee {
   firstName: string
   lastName: string
   email: string
+  departments?: { id: number; name: string }[]
 }
 
 export interface CreateEmployeeInput {

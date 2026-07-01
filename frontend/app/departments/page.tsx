@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Pencil, Trash2, Check, X } from "lucide-react"
+import { Pencil, Trash2, Check, X, UserPlus } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -22,6 +22,7 @@ import {
 } from "@/lib/api/departments"
 import CreateDepartmentDialog from "@/components/create-department-dialog"
 import DeleteDepartmentDialog from "@/components/delete-department-dialog"
+import AssignEmployeesDialog from "@/components/assign-employees-dialog"
 import { LineWobble, Ping } from "ldrs/react"
 import "ldrs/react/LineWobble.css"
 import "ldrs/react/Ping.css"
@@ -34,6 +35,7 @@ export default function DepartmentsPage() {
     description: "",
   })
   const [deleteTarget, setDeleteTarget] = useState<Department | null>(null)
+  const [assignTarget, setAssignTarget] = useState<Department | null>(null)
 
   const {
     data: departments,
@@ -102,6 +104,9 @@ export default function DepartmentsPage() {
                     <TableHead className="w-8 text-right">Id</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Description</TableHead>
+                    <TableHead className="w-20 text-center">
+                      Employees
+                    </TableHead>
                     <TableHead className="w-20"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -137,6 +142,19 @@ export default function DepartmentsPage() {
                             }))
                           }
                         />
+                        <TableCell className="text-center">
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => setAssignTarget(dept)}
+                            className="gap-1"
+                          >
+                            <UserPlus className="size-4" />
+                            <span className="text-xs">
+                              {dept.employeeCount}
+                            </span>
+                          </Button>
+                        </TableCell>
                         <TableCell className="p-0">
                           {isEditing ? (
                             <div className="flex h-full">
@@ -204,6 +222,16 @@ export default function DepartmentsPage() {
             open={!!deleteTarget}
             onOpenChange={(open) => {
               if (!open) setDeleteTarget(null)
+            }}
+          />
+        )}
+
+        {assignTarget && (
+          <AssignEmployeesDialog
+            department={assignTarget}
+            open={!!assignTarget}
+            onOpenChange={(open) => {
+              if (!open) setAssignTarget(null)
             }}
           />
         )}
